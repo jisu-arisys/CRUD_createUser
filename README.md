@@ -17,10 +17,10 @@
 
 #### 파일구조
 
-- arisys/bin/폴더명/분류.class
-- arisys/jisu/폴더명/분류.class
-- arisys/youngwoo/폴더명/분류.class
-- arisys/junyoung/폴더명/분류.class
+- /bin/폴더명/분류.class
+- /jisu/폴더명/분류.class
+- /youngwoo/폴더명/분류.class
+- /junyoung/폴더명/분류.class
 
 ### 브랜치
 ```bash
