@@ -22,6 +22,19 @@
 - arisys/youngwoo/폴더명/분류.class
 - arisys/junyoung/폴더명/분류.class
 
+### 브랜치
+```bash
+master
+├── bin
+│   └── cumstom
+├── jisu
+│   └── cumstom
+├── youngwoo
+│   └── cumstom
+└── junyoung
+     └── cumstom
+``` 
+
 ## LOG
 
 | **년/월/일** | **내용** | **진행 현황** | **참가자** |**비고** |
