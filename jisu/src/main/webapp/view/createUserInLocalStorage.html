@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+
+<title>사용자 등록</title>
+
+</head>
+<style>
+	p{
+		margin-left: 20px;
+	}
+	h1{
+		text-align: center;
+		margin: 40px;
+	}
+
+	table.in {
+		margin: auto;
+		text-align: left;
+		border-spacing: 0px;
+		border-collapse: collapse;
+	}
+
+	table.in td,th{
+		border: 1px solid rgb(0, 0, 0);
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.in input {
+		border: none;
+	}
+	table.in input:hover,:focus {
+		border: none;
+		outline: none;
+	}
+
+	table.out {
+		margin: auto;
+		/* border: 1px solid rgb(0, 103, 118); */
+		border-spacing: 0px;
+		margin-top: 20px;
+		width: 700px;
+		text-align: center;
+	}
+
+	table.out td:nth-child(1),td:nth-child(2){
+		width: 100px;
+	}
+
+	table.out thead{
+		background-color: rgb(34, 176, 181);
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.out th,td{
+		border: 0px;
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.out tr:nth-child(odd) {
+		background-color: rgba(1, 170, 176, 0.3);
+	}
+	table.out tr:nth-child(even) {
+		background-color: rgba(29, 211, 217, 0.1);
+	}
+
+	div.formBtn{
+		width: 100px;
+		margin: auto;
+		padding: 20px;
+	}
+	div.mode {
+		width: 700px;
+		margin: auto;
+		text-align: right;
+	}
+</style>
+<body>
+	<p>LocalStorage사용</p>
+	<h1>사용자 등록</h1>
+	<div>
+		<form id="inputForm">
+			<table class="in">
+				<tr>
+					<th>ID</th>
+					<td><input type="text" id="id" name="id" placeholder="고유값" autofocus required></td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td><input type="text" id="name" name="name" placeholder="문자 입력" required></td>
+				</tr>
+				<tr>
+					<th>나이</th>
+					<td><input type="number" id="age" name="age" placeholder="숫자만 입력" required min="1"></td>
+				</tr>
+					<tr>
+					<th>성별</th>
+				<td>
+					<label>남
+						<input type="radio" id="gender_m" name="gender" value="남" required checked>
+					</label>
+						&numsp;
+					<label>여
+						<input type="radio" id="gender_f" name="gender" value="여" >
+					</label>
+				</td>
+				</tr>
+				<tr>
+				<th>직업</th>
+				<td>
+					<select id="job" name="job">
+						<option>영업직</option>
+						<option>기술직</option>
+					</select>
+				</td>
+				</tr>
+			</table>
+			<div class="formBtn">
+				<input type="submit" value="등록" id="submitBtn">
+				<input type="reset" value="리셋">
+			</div>
+		</form>
+	</div>
+	<div>
+		<div class="mode" >
+			<button onclick="insertModeBtnFunction()" id="insertMode" hidden="true">등록으로 전환</button>
+		</div>
+		<table class="out" id="listTable">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>이름</th>
+					<th>나이</th>
+					<th>성별</th>
+					<th>직업</th>
+					<th>비고</th>
+				</tr>
+			</thead>
+			<tbody id='tableBody'>
+			</tbody>
+		</table>
+	</div>
+<script src= "/view/userCRUD_local.js"></script>
+</body>
+</html>

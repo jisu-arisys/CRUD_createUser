@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>menu 1</title>
+</head>
+<style>
+  h1{
+    text-align: center;
+    margin-left: -200px;
+  }
+	table.out {
+		margin: auto;
+		border-spacing: 0px;
+		margin-top: 20px;
+		width: 1000px;
+		text-align: center;
+	}
+  table.out td:nth-child(4), td:nth-child(6){
+    text-align: left;
+  }
+  table.out td:nth-child(2), td:nth-child(5){
+    min-width: 80px;
+  }
+
+  table.out td:nth-child(7){
+    min-width: 180px;
+  }
+  table.out td:nth-child(1){
+    min-width: 40px;
+  }
+
+	table.out thead{
+		background-color: rgb(34, 176, 181);
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.out th,td{
+		border: 0px;
+		padding: 5px 5px 5px 5px;
+	}
+
+	table.out tr:nth-child(odd) {
+		background-color: rgba(1, 170, 176, 0.3);
+	}
+	table.out tr:nth-child(even) {
+		background-color: rgba(29, 211, 217, 0.1);
+	}
+
+</style>
+<body>
+
+  <h1>월별 지출내역</h1>
+  <hr>
+  <div>
+    <label>
+      파일 입력 : 
+      <input type="file" onchange="readExcel()">
+    </label>
+  </div>
+  <table class="out">
+    <thead>
+      <tr>
+        <th>연번</th>
+        <th>일자</th>
+        <th>차변분류</th>
+        <th>차변금액</th>
+        <th>대변분류</th>
+        <th>대변금액</th>
+        <th>비고</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+    <thead>
+      <tr>
+        <th colspan="2">합계</th>
+        <th colspan="2" id="sumL">-</th>
+        <th colspan="2" id="sumR">-</th>
+        <th id="check">대차금액</th>
+      </tr>
+    </thead>
+  </table>
+  
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+  function readExcel() {
+    let input = event.target;
+    let reader = new FileReader();
+    reader.onload = () =>{
+        let data = reader.result;
+        let workBook = XLSX.read(data, { type: 'binary' });
+        workBook.SheetNames.forEach((sheetName)=> {
+            console.log('SheetName: ' + sheetName);
+            let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
+            console.log(JSON.stringify(rows));
+            viewList(rows);
+
+        })
+    };
+    reader.readAsBinaryString(input.files[0]);
+  }
+  function dateFormatWithMoment(date){
+    let m = moment(date, "YYYYMMDD"); //20230601
+    let formatDate = m.format("YYYY-MM-DD"); //2023-06-01
+    return formatDate;
+  }
+  function viewList(rows){
+    let tbodyString ="";
+    let count = 1;
+    let sumL = document.getElementById("sumL");
+    let sumR = document.getElementById("sumR");
+    let sumLeft =0;
+    let sumRight =0;
+    let discount =0;
+    // header = ["일자", "차변분류", "차변금액", "대변분류", "대변금액", "비고"];
+    header = ["이용일", "차변분류", "이용금액", "대변분류", "원금", "가맹점"];
+    rows.forEach((row)=>{
+
+      if(row["가맹점"]==="일시불합계"){
+        sumRight = row["원금"];
+         console.log(row["원금"]);
+      }else{
+
+      sumLeft += row["이용금액"];
+      tbodyString += "<tr><td>" + count++ + "</td>";
+      for(head of header){
+        if(head === "이용일"){
+          tbodyString += "<td>" + dateFormatWithMoment(row[head]) + "</td>";
+        }else if(head ==="대변분류"){
+          tbodyString += "<td>" + "삼성카드" + "</td>";
+        }else{
+          tbodyString += "<td>" + row[head] + "</td>";
+        }
+      }
+      tbodyString += "</tr>";
+      }
+    })
+
+
+    discount = Number(sumLeft) - sumRight;
+    sumLeft -= Number(discount);
+    let check = document.getElementById("check");
+    if(sumLeft === sumRight){
+      check.innerHTML ="Ok";
+    }
+
+    console.log(typeof discount, typeof sumLeft, typeof sumRight);
+
+    sumL.innerHTML = sumLeft;
+    sumR.innerHTML = sumRight;
+    tbodyString += "<tr><td>"+ count++ +"</td><td>결산</td><td>할인</td><td>"
+        + discount +"</td><td>삼성카드</td><td>0</td><td>삼성카드할인</td></tr>";
+
+    let tableBody = document.getElementById("tableBody");
+    tableBody.innerHTML = tbodyString;
+    console.log(tbodyString);
+  }
+
+  // function setDate(excelDateValue){
+  //   let baseTime = new Date(1899, 11, 30).getTime();
+  //   let objDate = new Date(baseTime + (excelDateValue - 1 ) * 24 * 60 * 60 * 1000);
+  //   let stringDate = objDate.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  //   return stringDate;
+  // }
+
+</script>
+</html>

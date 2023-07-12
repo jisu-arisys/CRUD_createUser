@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+
+<title>사용자 등록</title>
+
+</head>
+<style>
+	p{
+		margin-left: 20px;
+	}
+
+	h1 {
+		text-align: center;
+		margin: 40px;
+	}
+
+	table.in {
+		margin: auto;
+		text-align: left;
+		border-spacing: 0px;
+		border-collapse: collapse;
+	}
+
+	table.in td,th{
+		border: 1px solid rgb(0, 0, 0);
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.in input {
+		border: none;
+	}
+	table.in input:hover,:focus {
+		border: none;
+		outline: none;
+	}
+
+	table.out {
+		margin: auto;
+		/* border: 1px solid rgb(0, 103, 118); */
+		border-spacing: 0px;
+		margin-top: 20px;
+		width: 900px;
+		text-align: center;
+	}
+
+	table.out th:nth-child(3),th:nth-child(4),th:nth-child(5){
+		width: 70px;
+	}
+
+	table.out thead{
+		background-color: rgb(34, 176, 181);
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.out th,td{
+		border: 0px;
+		padding: 5px 20px 5px 20px;
+	}
+
+	table.out tr:nth-child(odd) {
+		background-color: rgba(1, 170, 176, 0.3);
+	}
+	table.out tr:nth-child(even) {
+		background-color: rgba(29, 211, 217, 0.1);
+	}
+
+	div.formBtn{
+		width: 100px;
+		margin: auto;
+		padding: 20px;
+	}
+
+	div.search{
+		width: 900px;
+		text-align: left;
+	}
+	div.search input{
+		border: none;
+		outline: none;
+		border-bottom: 2px solid #5271e9;
+	}
+	.pagination{
+	width: 450px;
+	margin: auto;
+	margin-top: 20px;
+  background-color: #f2f2f2;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50px;
+	justify-content: center;
+}
+
+.pagination button {
+	/* margin: auto; */
+  width: 60px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #333;
+  font-size: 12px;
+  font-weight: 900;
+	border:none;
+}
+
+.pagination button:hover{
+  color: #fff;
+  background-color: #5271e9;
+}
+
+.pagination .highLight{
+  color: #fff;
+  background-color: #5271e9;
+}
+
+button#pageBtnLayer{
+	display: flex;
+  position: relative;
+	width: 350px;
+}
+div.service{
+	width: 900px;
+	margin: auto;
+	display: flex;
+}
+div.mode, div.sort{
+	width: 250px;
+	text-align: left;
+}
+div.search{
+	width: 400px;
+	text-align: center;
+}
+div.sort{
+	width: 250px;
+	text-align: right;
+}
+
+</style>
+<body>
+	<p>postgreSQL사용</p>
+
+	<h1>사용자 등록</h1>
+	<div>
+		<form id="inputForm">
+			<table class="in">
+				<tr>
+					<th>ID</th>
+					<td><input type="text" id="id" name="id" placeholder="고유값" autofocus required></td>
+				</tr>
+				<tr>
+					<th>이름</th>
+					<td><input type="text" id="name" name="name" placeholder="문자 입력" required></td>
+				</tr>
+				<tr>
+					<th>나이</th>
+					<td><input type="number" id="age" name="age" placeholder="숫자만 입력" required min="1"></td>
+				</tr>
+					<tr>
+					<th>성별</th>
+				<td>
+					<label>남
+						<input type="radio" id="gender_m" name="gender" value="남" required checked>
+					</label>
+						&numsp;
+					<label>여
+						<input type="radio" id="gender_f" name="gender" value="여" >
+					</label>
+				</td>
+				</tr>
+				<tr>
+				<th>직업</th>
+				<td>
+					<select id="job" name="job">
+						<option>영업직</option>
+						<option>기술직</option>
+					</select>
+				</td>
+				</tr>
+			</table>
+			<div class="formBtn">
+				<input type="submit" value="등록" id="submitBtn">
+				<input type="reset" value="리셋">
+			</div>
+		</form>
+	</div>
+	<div class="service">
+		<div class="mode" >
+			<button onclick="insertModeBtnFunction()" id="insertMode" hidden="true">등록으로 전환</button>
+			<button onclick="downloadExcel()" id="downloadExcel">xlsx 다운로드</button>
+			<a id="downLink" href="#" hidden>Link</a>
+		</div>
+		<div class="search" >
+			<select id="category">
+				<option>id</option>
+				<option>name</option>
+				<option>all</option>
+			</select>
+			<label>
+				<input type="text" placeholder="검색어를 입력하세요" id="searchEle" onchange="searchList(this.value)">
+			</label>
+			<button onclick="searchList()">검색</button>
+		</div>
+		<div class="sort">
+			<label>
+				정렬 : 
+				<select id="sortType" onchange="reSort()">
+					<option>id</option>
+					<option>name</option>
+					<option>age</option>
+					<option>gender</option>
+					<option>job</option>
+				</select> &nbsp;
+				<select id="sending" onchange="reSort()">
+					<option>asc</option>
+					<option>desc</option>
+				</select>
+			</label>
+		</div>
+	</div>
+		<table class="out" id="listTable">
+			<thead id="tableHead">
+				<th onclick="setSortType('id')">ID <span class="asc" hidden="true">🔼</span><span class="dsc" hidden="true">🔽</span></th>
+				<th onclick="setSortType('name')">이름 <a></a></th>
+				<th onclick="setSortType('age')">나이 <a></a></th>
+				<th onclick="setSortType('gender')">성별 <a></a></th>
+				<th onclick="setSortType('job')">직업 <a></a></th>
+				<th>비고</th>
+			</thead>
+			<tbody id='tableBody'>
+			</tbody>
+		</table>
+	<div class="pagination" id="pagination">
+		<button onclick="prevPage()"> PREV</button>
+		<button id="btn1" class="highLight" onclick="changePage(1)">1</button>
+		<button id="btn2" class="" onclick="changePage(2)">2</button>
+		<button id="btn3" class="" onclick="changePage(3)">3</button>
+		<button id="btn4" class="" onclick="changePage(4)">4</button>
+		<button id="btn5" class="" onclick="changePage(5)">5</button>
+		<button id="btn6" class="" onclick="changePage(6)">6</button>
+		<button id="btn7" class="" onclick="changePage(7)">7</button>
+		<button id="btn8" class="" onclick="changePage(8)">8</button>
+		<button id="btn9" class="" onclick="changePage(9)">9</button>
+		<button id="btn10" class="" onclick="changePage(10)">10</button>
+		<!-- <div id="pageBtnLayer">
+		</div> -->
+    <button onclick="nextPage()"> &nbsp;NEXT </button>
+	</div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src= "/view/userCRUD_db.js"></script>
+<script src= "/view/userXlxs.js"></script>
+<script>
+	const tableHeadChilds = document.getElementById("tableHead").childNodes;
+function setSortType(sortType){
+	for(let th of tableHeadChilds){
+		th.childNodes.getElementByClass("")
+	} 
+	
+
+}
+
+</script>
+</body>
+</html>
