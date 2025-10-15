@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,18 +48,6 @@ public class UsersController {
         return new ResponseEntity<>(fileBytes, HttpStatus.OK);
     }
 
-//    //검색 카테고리 별 조회
-//    @GetMapping("/category/{page}/{search}/{category}/{sort}/{sending}")
-//    public ResponseEntity<Page<User>> getListWithPaging(@PathVariable("page") Integer page,
-//            @PathVariable("search") String search, @PathVariable("category") String category,
-//            @PathVariable("sort") String sort, @PathVariable() String sending) {
-//        page -= 1;
-//        Pageable pageable = PageRequest.of(page, pageSize, createSort(sending,sort));
-//        Page<User> users = service.categorySearchPagingList(pageable, search, category);
-//        logger.info("List : 카테고리검색페이지출력" + page);
-//
-//        return new ResponseEntity<>(users, HttpStatus.OK);
-//    }
     //검색 카테고리 별 조회
     @PostMapping("/searchCondition")
     public ResponseEntity<Page<User>> getListWithPaging(@RequestBody SearchCondition search) {
@@ -79,14 +66,6 @@ public class UsersController {
         logger.info("List : 페이지출력" + page);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
-//    //목록조회
-//    @GetMapping("/list")
-//    public ResponseEntity<List<UserDto>> getList(){
-//        logger.info("list : 목록출력");
-//        List<UserDto> users = getUsersDto(service.list());
-//        return new ResponseEntity<>(users, HttpStatus.OK);
-//    }
 
     private List<UserDto> getUsersDto(List<User> users){
         List<UserDto> usersDto = new ArrayList<>();
